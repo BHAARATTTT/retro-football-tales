@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Retro Football Tales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Special+Elite&family=Inter:wght@400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #1a1008;
+    --cream: #f5f0e8;
+    --aged: #e8dfc8;
+    --rust: #b5451b;
+    --gold: #c9922a;
+    --grass: #2d5a1b;
+    --midnight: #0d1b2a;
+    --sticker-yellow: #f7d94c;
+    --sticker-red: #e63946;
+    --sticker-blue: #1d6fa4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; min-height: 100vh; }
+
+  /* ── Masthead ── */
+  .masthead { background: var(--midnight); color: var(--cream); text-align: center; border-bottom: 4px solid var(--gold); position: relative; overflow: hidden; }
+  .masthead::before { content:''; position:absolute; inset:0; background: repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 41px); pointer-events:none; }
+  .masthead-top { padding: 8px 24px; border-bottom: 1px solid rgba(201,146,42,0.3); display:flex; justify-content:space-between; align-items:center; font-family:'Special Elite',serif; font-size:11px; letter-spacing:0.08em; color:rgba(245,240,232,0.6); }
+  .masthead-title { padding: 28px 24px 20px; }
+  .masthead-eyebrow { font-family:'Special Elite',serif; font-size:11px; letter-spacing:0.3em; color:var(--gold); text-transform:uppercase; margin-bottom:8px; }
+  .masthead h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(52px,10vw,96px); letter-spacing:0.04em; line-height:0.9; color:var(--cream); }
+  .masthead h1 span { color:var(--gold); }
+  .masthead-sub { font-family:'Special Elite',serif; font-size:13px; letter-spacing:0.1em; color:rgba(245,240,232,0.7); margin-top:10px; }
+
+  /* ── Nav ── */
+  nav { background:var(--rust); display:flex; justify-content:center; border-bottom:3px solid var(--ink); }
+  nav button { background:none; border:none; color:var(--cream); font-family:'Special Elite',serif; font-size:13px; letter-spacing:0.12em; padding:12px 24px; cursor:pointer; text-transform:uppercase; border-right:1px solid rgba(0,0,0,0.2); transition:background 0.15s; }
+  nav button:last-child { border-right:none; }
+  nav button:hover, nav button.active { background:rgba(0,0,0,0.25); }
+  nav button.active { border-bottom:3px solid var(--gold); }
+
+  /* ── Pages ── */
+  .page { display:none; }
+  .page.active { display:block; }
+  .container { max-width:1100px; margin:0 auto; padding:32px 20px; }
+  .section-hed { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:0.06em; color:var(--midnight); border-bottom:3px double var(--rust); padding-bottom:8px; margin-bottom:24px; }
+
+  /* ── Stories ── */
+  .stories-grid { display:grid; grid-template-columns:2fr 1fr; gap:24px; }
+  @media (max-width:720px) { .stories-grid { grid-template-columns:1fr; } }
+
+  .feature-story { background:white; border:1px solid #c4b89a; padding:28px; position:relative; }
+  .feature-story::before { content:'FEATURE'; position:absolute; top:-1px; left:28px; background:var(--rust); color:var(--cream); font-family:'Special Elite',serif; font-size:10px; letter-spacing:0.2em; padding:3px 10px; }
+
+  .story-era { font-family:'Special Elite',serif; font-size:11px; letter-spacing:0.15em; color:var(--rust); text-transform:uppercase; margin-bottom:8px; margin-top:16px; }
+  .story-headline { font-family:'Playfair Display',serif; font-size:clamp(22px,3.5vw,32px); font-weight:900; line-height:1.1; color:var(--midnight); margin-bottom:12px; }
+  .story-deck { font-family:'Special Elite',serif; font-size:14px; color:#5a4a30; margin-bottom:16px; line-height:1.5; font-style:italic; }
+  .byline { font-family:'Special Elite',serif; font-size:11px; letter-spacing:0.1em; color:#7a6040; text-transform:uppercase; margin-bottom:12px; }
+  .story-body { font-size:15px; line-height:1.75; color:#2a1f10; }
+  .story-body.two-col { columns:2; column-gap:24px; }
+  @media (max-width:600px) { .story-body.two-col { columns:1; } }
+  .story-body p { margin-bottom:14px; }
+
+  .sidebar-stories { display:flex; flex-direction:column; gap:16px; }
+  .sidebar-story { background:white; border:1px solid #c4b89a; padding:16px; cursor:pointer; transition:border-color 0.15s; }
+  .sidebar-story:hover { border-color:var(--rust); }
+  .sidebar-story .story-headline { font-size:17px; margin-bottom:6px; }
+  .sidebar-story .story-body { font-size:13px; line-height:1.6; }
+
+  .nav-btn { background:var(--midnight); color:var(--cream); border:2px solid var(--gold); font-family:'Special Elite',serif; font-size:13px; letter-spacing:0.15em; padding:10px 24px; cursor:pointer; text-transform:uppercase; margin-top:20px; transition:background 0.15s; }
+  .nav-btn:hover { background:var(--rust); }
+
+  .story-counter { font-family:'Special Elite',serif; font-size:12px; color:#7a6040; margin-top:12px; }
+
+  /* ── Gallery ── */
+  .gallery-intro { font-family:'Special Elite',serif; font-size:15px; color:#5a4a30; margin-bottom:24px; line-height:1.6; }
+  .era-tabs { display:flex; gap:4px; margin-bottom:24px; flex-wrap:wrap; }
+  .era-tab { background:var(--aged); border:1px solid #c4b89a; font-family:'Special Elite',serif; font-size:12px; letter-spacing:0.1em; padding:6px 16px; cursor:pointer; text-transform:uppercase; color:var(--ink); transition:all 0.15s; }
+  .era-tab:hover, .era-tab.active { background:var(--midnight); color:var(--cream); border-color:var(--midnight); }
+  .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:20px; }
+  .gallery-card { background:white; border:1px solid #c4b89a; overflow:hidden; }
+  .gallery-img { width:100%; aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; padding:20px; }
+  .gallery-caption { padding:12px 14px; border-top:1px solid #c4b89a; }
+  .gallery-caption .story-era { margin-top:0; margin-bottom:4px; }
+  .gallery-caption strong { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; display:block; margin-bottom:4px; }
+  .gallery-caption p { font-size:12px; color:#5a4a30; line-height:1.4; }
+  .img-50s { background:#2a2a2a; color:#d4c9a8; }
+  .img-60s { background:#1a3a1a; color:#7ec876; }
+  .img-70s { background:#4a2010; color:#f0a830; }
+  .img-80s { background:#0a1a3a; color:#4a90d9; }
+  .img-90s { background:#1a0a2a; color:#b44ade; }
+  .img-00s { background:#0a2a1a; color:#4ade80; }
+
+  /* ── Stats ── */
+  .stats-search { display:flex; gap:12px; margin-bottom:28px; flex-wrap:wrap; }
+  .search-input { flex:1; min-width:200px; background:white; border:2px solid #c4b89a; font-family:'Special Elite',serif; font-size:15px; padding:10px 16px; color:var(--ink); outline:none; }
+  .search-input:focus { border-color:var(--rust); }
+  .player-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px,1fr)); gap:20px; }
+  .player-card { background:white; border:2px solid var(--midnight); position:relative; overflow:hidden; }
+  .player-card::before { content:''; position:absolute; top:0; left:0; right:0; height:6px; background:linear-gradient(90deg,var(--rust),var(--gold),var(--grass)); }
+  .player-header { padding:20px 20px 14px; border-bottom:1px solid #c4b89a; position:relative; }
+  .player-number { font-family:'Bebas Neue',sans-serif; font-size:60px; line-height:1; color:var(--rust); opacity:0.12; position:absolute; right:12px; top:8px; }
+  .player-name { font-family:'Playfair Display',serif; font-size:22px; font-weight:900; color:var(--midnight); line-height:1.1; }
+  .player-meta { font-family:'Special Elite',serif; font-size:11px; letter-spacing:0.1em; color:var(--rust); text-transform:uppercase; margin-top:5px; }
+  .player-bio { font-size:13px; color:#3a2a14; margin-top:8px; line-height:1.55; }
+  .stats-grid { display:grid; grid-template-columns:repeat(3,1fr); }
+  .stat-cell { padding:14px 8px; text-align:center; border-right:1px solid #c4b89a; border-bottom:1px solid #c4b89a; }
+  .stat-cell:nth-child(3n) { border-right:none; }
+  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--midnight); line-height:1; }
+  .stat-label { font-family:'Special Elite',serif; font-size:9px; letter-spacing:0.1em; color:#7a6040; text-transform:uppercase; margin-top:3px; }
+  .player-legacy { padding:14px 16px; border-top:1px solid #c4b89a; background:#fafaf6; }
+  .sticker { display:inline-block; font-family:'Bebas Neue',sans-serif; font-size:10px; letter-spacing:0.1em; padding:3px 8px; margin:3px 3px 0 0; }
+  .sticker-gold { background:var(--sticker-yellow); color:var(--ink); }
+  .sticker-red  { background:var(--sticker-red); color:white; }
+  .sticker-blue { background:var(--sticker-blue); color:white; }
+  .empty-state { text-align:center; padding:40px 24px; color:#7a6040; font-family:'Special Elite',serif; font-size:15px; line-height:1.6; border:2px dashed #c4b89a; }
+  .filter-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+  .filter-tag { background:var(--aged); border:1px solid #c4b89a; font-family:'Special Elite',serif; font-size:11px; padding:5px 14px; cursor:pointer; text-transform:uppercase; transition:all 0.15s; }
+  .filter-tag:hover, .filter-tag.active { background:var(--midnight); color:var(--cream); border-color:var(--midnight); }
+
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--aged); }
+  ::-webkit-scrollbar-thumb { background:var(--rust); }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-top">
+    <span>EST. 1950 · THE WORLD'S GAME</span>
+    <span id="today-date"></span>
+    <span>ISSUE NO. 27,209</span>
+  </div>
+  <div class="masthead-title">
+    <div class="masthead-eyebrow">The Definitive Archive of the Beautiful Game</div>
+    <h1>RETRO <span>FOOTBALL</span> TALES</h1>
+    <p class="masthead-sub">Stories · Legends · Glory · History</p>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('stories',this)">📰 Stories</button>
+  <button onclick="showPage('gallery',this)">🖼 Gallery</button>
+  <button onclick="showPage('stats',this)">📊 Legends</button>
+</nav>
+
+<!-- ══════════════════ STORIES ══════════════════ -->
+<div id="page-stories" class="page active">
+  <div class="container">
+    <h2 class="section-hed">FROM THE ARCHIVES</h2>
+    <div class="stories-grid">
+      <div>
+        <div class="feature-story" id="feature-box"></div>
+        <button class="nav-btn" onclick="nextStory()">↻ Next Story</button>
+        <p class="story-counter" id="story-counter"></p>
+      </div>
+      <div class="sidebar-stories" id="sidebar-box"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ GALLERY ══════════════════ -->
+<div id="page-gallery" class="page">
+  <div class="container">
+    <h2 class="section-hed">MOMENTS IN TIME</h2>
+    <p class="gallery-intro">Iconic scenes from across the decades — hand-picked from football's greatest chapters. Each era carries its own soul, its own texture, its own unforgettable cast.</p>
+    <div class="era-tabs">
+      <button class="era-tab active" onclick="filterGallery('all',this)">All Eras</button>
+      <button class="era-tab" onclick="filterGallery('1950s',this)">1950s</button>
+      <button class="era-tab" onclick="filterGallery('1960s',this)">1960s</button>
+      <button class="era-tab" onclick="filterGallery('1970s',this)">1970s</button>
+      <button class="era-tab" onclick="filterGallery('1980s',this)">1980s</button>
+      <button class="era-tab" onclick="filterGallery('1990s',this)">1990s</button>
+      <button class="era-tab" onclick="filterGallery('2000s',this)">2000s</button>
+    </div>
+    <div class="gallery-grid" id="gallery-grid"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ STATS ══════════════════ -->
+<div id="page-stats" class="page">
+  <div class="container">
+    <h2 class="section-hed">LEGENDS OF THE GAME</h2>
+    <div class="stats-search">
+      <input class="search-input" type="text" id="search-input" placeholder="Search by name, club, or nation..." oninput="filterPlayers()" />
+    </div>
+    <div class="filter-bar">
+      <button class="filter-tag active" onclick="filterByPos('all',this)">All Positions</button>
+      <button class="filter-tag" onclick="filterByPos('Forward',this)">Forwards</button>
+      <button class="filter-tag" onclick="filterByPos('Midfielder',this)">Midfielders</button>
+      <button class="filter-tag" onclick="filterByPos('Defender',this)">Defenders</button>
+      <button class="filter-tag" onclick="filterByPos('Goalkeeper',this)">Goalkeepers</button>
+    </div>
+    <div class="player-grid" id="player-grid"></div>
+  </div>
+</div>
+
+<script>
+// ── Date ──────────────────────────────────────────
+document.getElementById('today-date').textContent =
+  new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+
+// ── Navigation ────────────────────────────────────
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════════════
+// DATA — STORIES
+// ══════════════════════════════════════════════════
+const STORIES = [
+  {
+    era: '1970 · Mexico World Cup',
+    headline: 'The Gods Played in Gold: Brazil\'s Immortal Summer',
+    deck: 'How Pelé, Jairzinho and Tostão conjured football so pure it has never been surpassed.',
+    byline: 'By Eduardo Carvalho · Rio de Janeiro · July 1970',
+    body: [
+      'The Azteca Stadium shimmered beneath a merciless Mexican sun on the afternoon of June 21, 1970, and what unfolded on that scorched rectangle of grass has been debated, replayed, and revered for more than half a century. Brazil, in their famous canary yellow, did not merely win the World Cup that day — they performed an act of collective artistry so complete that the football world has spent every year since trying, and failing, to replicate it.',
+      'At the centre of everything was Edson Arantes do Nascimento — Pelé — in what most who were present would describe as the finest tournament of his extraordinary career. Three goals, six assists, and an almost supernatural awareness of space and movement that left defenders grasping at air. But this Brazilian side was never about one man. Jairzinho scored in every single match — a feat that stands alone in World Cup history. Tostão glided between the lines. Rivelino\'s left foot was a thunderbolt. Gérson orchestrated from deep.',
+      'Italy, the opponents in the final, were a formidable side built on the iron of catenaccio. They were dismantled 4–1. The fourth goal — a sweeping move involving eight outfield players that ended with Carlos Alberto crashing the ball into the corner — remains the most celebrated team goal in the tournament\'s history. Brazil lifted the Jules Rimet Trophy for the third time and were allowed to keep it permanently. Some trophies, the governing bodies understood, belonged to their greatest champions.'
+    ],
+    honours: ['World Cup Champions', 'Pelé: Golden Ball', 'Jairzinho: 7 goals in 6 games']
+  },
+  {
+    era: '1986 · Mexico City',
+    headline: 'God\'s Left Hand: Maradona and the Match That Split the World',
+    deck: 'Two goals five minutes apart — one scandalous, one sublime — defined an entire era of football.',
+    byline: 'By James Whitfield · Mexico City · June 1986',
+    body: [
+      'There are matches that settle scores, and there are matches that create legends. The 1986 World Cup quarter-final between Argentina and England, played in the white heat of the Azteca Stadium just four years after the Falklands War, was both. For 51 minutes, it was tense, cagey, and forgettable. Then Diego Armando Maradona touched the ball with his fist, and football entered mythology.',
+      'The Hand of God goal — Maradona\'s left fist guiding the ball past England goalkeeper Peter Shilton — should by rights have been the only story of that afternoon. The referee missed it. Argentina led. But what happened four minutes later rewrote the meaning of that moment entirely. Maradona collected the ball deep in his own half, turned, and ran. He ran past Peter Beardsley. Past Peter Reid. Past Terry Butcher, twice. Past Terry Fenwick. Past Shilton. Sixty yards. Ten seconds. Five English defenders. One goal that FIFA would later vote the greatest in the tournament\'s history.',
+      'In a single afternoon, Maradona had revealed everything that football could be — its cheating and its genius, its theatre and its transcendence. Argentina went on to lift the trophy. England went home. And Maradona, for a generation of South Americans, became something greater than a footballer. He became a symbol. Of defiance, of brilliance, of a small man defeating a larger power through the sheer force of his talent.'
+    ],
+    honours: ['World Cup Champions 1986', 'Golden Ball Winner', 'Goal of the Century']
+  },
+  {
+    era: '1999 · Champions League Final',
+    headline: 'Two Minutes From Defeat, Manchester United Stole Immortality',
+    deck: 'Sheringham, Solskjær, and the most dramatic three minutes in European football history.',
+    byline: 'By Peter Hargreaves · Barcelona · May 1999',
+    body: [
+      'The scoreboard at Camp Nou read 90 minutes. Bayern Munich led 1–0. The Champions League trophy had been engraved with the German club\'s name. Sir Alex Ferguson\'s Manchester United, chasing an unprecedented Treble, appeared to have run out of road, run out of time, and run out of miracles. The Bayern players were already beginning to celebrate.',
+      'Then Teddy Sheringham equalised. Then, with the clock showing 93 minutes, Ole Gunnar Solskjær stabbed the ball into the roof of the net from six yards. The Norwegian substitute had been on the pitch for barely eight minutes. What followed was chaos — United players sprinting in every direction, grown men weeping, Ferguson standing motionless on the touchline with an expression that mixed ecstasy with disbelief.',
+      'The result completed the most coveted achievement in English football history: the Treble. Premier League, FA Cup, Champions League — all won in a single season. It remains the only time an English club has achieved it. That night in Barcelona, Roy Keane — suspended for the final, watching from the stands in his suit — cried. Peter Schmeichel turned cartwheels in the goalmouth. And somewhere in a German dressing room, an entire squad sat in stunned silence, trying to understand how a trophy that had been theirs for ninety minutes had been snatched away in the time it takes to draw breath.'
+    ],
+    honours: ['Champions League 1999', 'Premier League 1999', 'FA Cup 1999', 'The Treble']
+  },
+  {
+    era: '1974 · West Germany World Cup',
+    headline: 'Total Football: How Cruyff\'s Netherlands Rewired the Game',
+    deck: 'A Dutch revolution that changed football\'s tactical DNA — and never won the trophy it deserved.',
+    byline: 'By Hans van der Berg · Amsterdam · July 1974',
+    body: [
+      'Johan Cruyff turned, pivoted on his left foot, and left Rudi Krol standing in his shadow. It was the most replicated moment in football coaching history — a feint so simple, so devastating, so endlessly imitated that it now bears his name in every coaching manual on earth. The Cruyff Turn. But the man himself was more than a trick. He was a philosophy given flesh, and in the summer of 1974, that philosophy very nearly conquered the world.',
+      'Rinus Michels had built a Netherlands side around the concept of Total Football — a system in which every player could occupy any position, in which the team contracted and expanded as a single breathing organism, pressing high, switching roles fluidly, suffocating opponents through intelligent collective movement rather than brute individual strength. With Cruyff as its conductor, it was a revelation. West Germany, Sweden, Brazil, Argentina — all were swept aside.',
+      'The final, against the host nation West Germany, remains one of the great tragedies of the tournament. The Netherlands scored before a German player had touched the ball — a penalty after 82 seconds. They then proceeded to play keep-ball, to showboat, to humiliate. And in doing so, they gave their opponents time to recover. Germany equalised before half time, scored again, and won 2–1. The most beautiful team in World Cup history finished second. But their influence on the game that followed was incalculable.'
+    ],
+    honours: ['World Cup Runners-Up 1974', 'European Championship 1988', 'Cruyff: Ballon d\'Or ×3']
+  },
+  {
+    era: '2005 · Champions League Final',
+    headline: 'The Miracle of Istanbul: How Liverpool Defied All Logic',
+    deck: 'Three goals down at half time. Five penalties saved. Champions of Europe.',
+    byline: 'By Sarah Connolly · Istanbul · May 2005',
+    body: [
+      'At half time in the Atatürk Olympic Stadium, the Liverpool dressing room was a study in devastation. Three goals down against AC Milan — the finest club side in Europe — Rafael Benítez\'s team had been dissected, outpassed, and outclassed by a Milan side containing Kaká, Shevchenko, Pirlo, and Maldini. Liverpool fans in the stands had begun leaving. Television commentators were speaking in past tense. The match, to all observable evidence, was over.',
+      'What happened in the second half has been called miraculous by people who do not use that word lightly. Steven Gerrard headed Liverpool\'s first goal on 54 minutes. Vladimír Šmicer volleyed the second. Xabi Alonso was denied from the spot but followed up for 3–3. Six minutes. Three goals. The momentum had swung so violently that Milan, a team of champions, simply could not reclaim it.',
+      'The penalty shootout that followed was decided by Jerzy Dudek, Liverpool\'s goalkeeper, who had begun the evening as an object of derision following a catastrophic error. He saved from Shevchenko. He waddled on his line, waved his arms, channelled Bruce Grobbelaar\'s famous jelly-legs routine, and made himself enormous. Liverpool were champions of Europe for the fifth time. And the football world agreed, without much argument, that nothing quite like it had ever been seen before.'
+    ],
+    honours: ['Champions League 2005', 'Gerrard: Man of the Match', '5th European Cup for Liverpool']
+  },
+  {
+    era: '1953 · Wembley Stadium',
+    headline: 'The Match That Shattered English Certainty Forever',
+    deck: 'Hungary\'s 6–3 dismantling of England at Wembley changed what football thought possible.',
+    byline: 'By Arthur Pemberton · London · November 1953',
+    body: [
+      'England had never lost at Wembley to continental opposition. It was not merely a statistic — it was an article of faith, a foundational belief in English footballing supremacy that had been nurtured across decades of proud isolation from the rest of the footballing world. On the afternoon of November 25, 1953, the Magnificent Magyars walked onto the Wembley turf and destroyed that belief so comprehensively that English football has arguably never fully recovered its confidence.',
+      'Hungary, led by the extraordinary Ferenc Puskás, were unlike anything English defenders had faced. They played without a conventional centre-forward, pulling England\'s rigid defence out of shape with relentless movement. Hidegkuti dropped deep and scored a hat-trick. Puskás — a barrel-chested left-footer of breathtaking quality — scored twice, including a drag-back that left Billy Wright lunging at empty air in a moment that became one of football\'s most iconic images.',
+      'The final score was 6–3. A Hungarian team that had not lost an international match in four years showed England exactly how far the rest of the world had moved. The rematch in Budapest the following year ended 7–1. English football would spend the next decade attempting to absorb the lesson. Some argued it was still absorbing it thirty years later.'
+    ],
+    honours: ['Puskás: 2 goals', 'Hidegkuti: hat-trick', 'Hungary unbeaten run: 32 games']
+  },
+  {
+    era: '1967 · European Cup Final',
+    headline: 'The Lisbon Lions: Celtic\'s Impossible Dream',
+    deck: 'Eleven men born within 30 miles of Glasgow became the first British side to win the European Cup.',
+    byline: 'By Angus MacPherson · Lisbon · May 1967',
+    body: [
+      'The rule Jock Stein imposed upon himself was simple and absolute: every player in the Celtic squad must be born within thirty miles of Celtic Park. In an era when European clubs were beginning to recruit globally, this was regarded as romantic nonsense. When Celtic drew Internazionale — the most defensive, most tactically sophisticated side in the world — in the 1967 European Cup final, the conventional wisdom said it was romantic nonsense about to be brutally exposed.',
+      'Inter Milan took the lead from the penalty spot after seven minutes. Helenio Herrera, their brilliant, calculating manager, ordered the walls to be pulled up. Inter retreated into the famous catenaccio formation — a system designed to turn a one-goal lead into an impenetrable fortress. Celtic attacked. Celtic attacked again. The Italian fortress held for an hour.',
+      'Then Tommy Gemmell equalised with a thunderous right-foot drive. Then Stevie Chalmers deflected Bobby Murdoch\'s shot into the net with six minutes remaining. Celtic had won 2–1. The Lisbon Lions — every one of them from Lanarkshire or Glasgow — had become champions of Europe. Jock Stein wept openly. Inter\'s players sat in the grass, unable to understand what had happened to them. British football had arrived on the continental stage, and it had arrived like thunder.'
+    ],
+    honours: ['European Cup 1967', 'Scottish League Title 1967', 'Domestic Treble 1967']
+  },
+  {
+    era: '1998 · France World Cup',
+    headline: 'Zidane\'s Two Headers and the Night France Became Champions',
+    deck: 'A talismanic performance from the son of Algerian immigrants crowned a generation.',
+    byline: 'By Michel Leblanc · Paris · July 1998',
+    body: [
+      'The Stade de France had never held so many people, and it had never been so loud. France versus Brazil in the World Cup final, on home soil, on a summer evening of perfect blue skies. Zinedine Zidane — the midfielder from Marseille whose parents had emigrated from Algeria — walked onto the pitch carrying the hopes of an entire nation on his broad, shaven-headed shoulders.',
+      'Zidane had been suspended for France\'s earlier matches and had missed key group stage games. His return to the team had coincided with France\'s best performances of the tournament. Against Brazil, in the final, he delivered the defining performance of his remarkable career. Two headers from corners — in the 27th minute and the 45th — gave France a half-time lead they would not relinquish. Emmanuel Petit added a third late in the match.',
+      'The scenes that followed — a million people on the Champs-Élysées, Zidane\'s face projected forty metres high onto the Arc de Triomphe, the French president embracing the players — were unlike anything the country had experienced. France, a nation that had struggled with questions of identity and integration, had won the World Cup with a team that reflected its multicultural reality. Zidane, the son of immigrants, held the trophy aloft. The image endured.'
+    ],
+    honours: ['World Cup Champions 1998', 'Zidane: Golden Ball', 'Petit & Zidane: Final goals']
+  }
+];
+
+const SIDEBAR_STORIES = [
+  {
+    era: '1950 · Brazil',
+    headline: 'The Maracanazo That Silenced 200,000',
+    body: 'Uruguay\'s impossible victory in the 1950 World Cup decider left Brazil in national mourning. The day 200,000 fell silent remains football\'s greatest shock.'
+  },
+  {
+    era: '1985 · Bradford',
+    headline: 'The Fire That Changed Football Safety Forever',
+    body: 'The Valley Parade fire of May 1985 killed 56 supporters and forced British football to confront the dangerous neglect of its crumbling grounds.'
+  },
+  {
+    era: '1992 · Denmark',
+    headline: 'Denmark: The Champions Nobody Invited',
+    body: 'Called up as late replacements after Yugoslavia\'s withdrawal, Denmark went on to stun the continent and lift the European Championship. Football\'s greatest fairytale.'
+  },
+  {
+    era: '1960 · Real Madrid',
+    headline: 'Seven Goals in a European Cup Final',
+    body: 'Real Madrid\'s 7–3 demolition of Eintracht Frankfurt at Hampden Park remains the most spectacular display in the history of European club football.'
+  },
+  {
+    era: '1988 · Netherlands',
+    headline: 'Van Basten\'s Volley That Defied Physics',
+    body: 'Marco van Basten\'s right-foot volley from an impossible angle in the 1988 European Championship final is widely regarded as the greatest goal ever scored in a major final.'
+  }
+];
+
+let currentStory = 0;
+
+function renderFeature(idx) {
+  const s = STORIES[idx];
+  document.getElementById('feature-box').innerHTML = `
+    <div class="story-era">${s.era}</div>
+    <h2 class="story-headline">${s.headline}</h2>
+    <p class="story-deck">${s.deck}</p>
+    <div class="byline">${s.byline}</div>
+    <div class="story-body two-col">
+      ${s.body.map(p => `<p>${p}</p>`).join('')}
+    </div>
+    <div style="margin-top:16px">
+      ${s.honours.map(h => `<span class="sticker sticker-gold">${h}</span>`).join('')}
+    </div>`;
+  document.getElementById('story-counter').textContent =
+    `Story ${idx + 1} of ${STORIES.length}`;
+}
+
+function renderSidebar() {
+  document.getElementById('sidebar-box').innerHTML = SIDEBAR_STORIES.slice(0,4).map(s => `
+    <div class="sidebar-story">
+      <div class="story-era">${s.era}</div>
+      <h3 class="story-headline">${s.headline}</h3>
+      <p class="story-body">${s.body}</p>
+    </div>`).join('');
+}
+
+function nextStory() {
+  currentStory = (currentStory + 1) % STORIES.length;
+  renderFeature(currentStory);
+}
+
+// ══════════════════════════════════════════════════
+// DATA — GALLERY
+// ══════════════════════════════════════════════════
+const GALLERY = [
+  { era:'1950s', cls:'img-50s', icon:'🏟', title:'Maracanã, 1950', sub:'The Maracanazo', desc:'200,000 souls fell silent as Uruguay stunned Brazil in the World Cup decider. The greatest upset in the tournament\'s history.' },
+  { era:'1950s', cls:'img-50s', icon:'⚽', title:'Wembley, 1953', sub:'The Magic Magyars', desc:'Hungary\'s 6–3 demolition of England shattered the myth of English supremacy and announced a new era of continental football.' },
+  { era:'1960s', cls:'img-60s', icon:'👑', title:'Hampden, 1960', sub:'Real Madrid 7–3 Frankfurt', desc:'Di Stéfano and Puskás combined for the most breathtaking European final ever played, witnessed by 127,000 in Glasgow.' },
+  { era:'1960s', cls:'img-60s', icon:'🏆', title:'Lisbon, 1967', sub:'Celtic\'s European Conquest', desc:'The Lisbon Lions became the first British club to lift the European Cup — every player born within 30 miles of Celtic Park.' },
+  { era:'1970s', cls:'img-70s', icon:'🌍', title:'Munich, 1974', sub:'Total Football Arrives', desc:'Cruyff\'s Netherlands introduced a generation to football played from another planet — fluid, pressing, revolutionary.' },
+  { era:'1970s', cls:'img-70s', icon:'⚡', title:'Mexico, 1970', sub:'Brazil\'s Perfect Summer', desc:'Pelé\'s Brazil produced football so sublime and so complete that it remains the benchmark for every generation since.' },
+  { era:'1980s', cls:'img-80s', icon:'✨', title:'Mexico City, 1986', sub:'The Goal of the Century', desc:'Maradona weaved through five English defenders in 10 seconds and 60 yards. FIFA named it the greatest goal ever scored.' },
+  { era:'1980s', cls:'img-80s', icon:'🥇', title:'Spain, 1982', sub:'Italy\'s Golden Tournament', desc:'Paolo Rossi, written off after a match-fixing ban, returned to score six goals in three games and win the World Cup for Italy.' },
+  { era:'1990s', cls:'img-90s', icon:'⏱', title:'Barcelona, 1999', sub:'Fergie\'s Fledglings', desc:'Two injury-time goals gave United the Treble. Ole Gunnar Solskjær\'s stab with the outside of his boot: football\'s most dramatic finish.' },
+  { era:'1990s', cls:'img-90s', icon:'🔵', title:'Wembley, 1995', sub:'Cantona\'s Return', desc:'Eric Cantona\'s first game back after suspension: FA Cup final, winner in extra time, collar up, arms spread. Utter theatre.' },
+  { era:'2000s', cls:'img-00s', icon:'🔴', title:'Istanbul, 2005', sub:'The Miracle of Istanbul', desc:'3–0 down at half time. Liverpool equalised in six second-half minutes. Then Dudek saved Shevchenko\'s penalty. Champions of Europe.' },
+  { era:'2000s', cls:'img-00s', icon:'⭐', title:'Athens, 2007', sub:'Milan\'s Redemption', desc:'Two years after Istanbul, Kaká destroyed Liverpool in a 2–1 win that felt like poetic justice for the most tactically complete club in Europe.' },
+];
+
+function renderGallery(filter) {
+  const items = filter === 'all' ? GALLERY : GALLERY.filter(m => m.era === filter);
+  document.getElementById('gallery-grid').innerHTML = items.map(m => `
+    <div class="gallery-card">
+      <div class="gallery-img ${m.cls}">
+        <div style="font-size:44px">${m.icon}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:0.15em;opacity:0.8;text-align:center">${m.sub.toUpperCase()}</div>
+      </div>
+      <div class="gallery-caption">
+        <div class="story-era">${m.era}</div>
+        <strong>${m.title}</strong>
+        <p>${m.desc}</p>
+      </div>
+    </div>`).join('');
+}
+
+function filterGallery(era, btn) {
+  document.querySelectorAll('.era-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderGallery(era);
+}
+
+// ══════════════════════════════════════════════════
+// DATA — PLAYERS
+// ══════════════════════════════════════════════════
+const PLAYERS = [
+  {
+    name:'Pelé', number:'10', nationality:'Brazil', position:'Forward', years:'1956–1977',
+    clubs:'Santos, New York Cosmos',
+    bio:'The only player to win three World Cups, Pelé scored over 1,000 career goals and defined what football could be at its most joyful and complete.',
+    stats:{ appearances:694, goals:643, assists:230, trophies:26, caps:91, intl_goals:77 },
+    honours:['World Cup 1958','World Cup 1962','World Cup 1970','Ballon d\'Or 1960'],
+    legacy:'Football\'s first global icon and, by most measures, still its greatest player.'
+  },
+  {
+    name:'Johan Cruyff', number:'14', nationality:'Netherlands', position:'Forward',years:'1964–1984',
+    clubs:'Ajax, Barcelona, Feyenoord',
+    bio:'The spiritual father of Total Football and tiki-taka, Cruyff transformed the game both as a player and later as the architect of Barcelona\'s philosophy.',
+    stats:{ appearances:514, goals:290, assists:198, trophies:22, caps:48, intl_goals:33 },
+    honours:['Ballon d\'Or ×3','European Cup ×3','La Liga ×2'],
+    legacy:'No player has had a greater influence on how football is played and thought about.'
+  },
+  {
+    name:'Diego Maradona', number:'10', nationality:'Argentina', position:'Midfielder', years:'1976–1997',
+    clubs:'Boca Juniors, Barcelona, Napoli, Sevilla',
+    bio:'The most electrifying individual talent in football history, capable of carrying a team on his back and making the impossible seem pedestrian.',
+    stats:{ appearances:491, goals:259, assists:237, trophies:14, caps:91, intl_goals:34 },
+    honours:['World Cup 1986','Serie A ×2','UEFA Cup 1989','Golden Ball 1986'],
+    legacy:'The hand of God, the goal of the century, and the most complete footballer ever to emerge from South America.'
+  },
+  {
+    name:'Franz Beckenbauer', number:'5', nationality:'West Germany', position:'Defender', years:'1964–1983',
+    clubs:'Bayern Munich, New York Cosmos, Hamburger SV',
+    bio:'The Kaiser reinvented the role of centre-back, attacking from deep with elegance and authority that no defender had previously attempted.',
+    stats:{ appearances:585, goals:94, assists:162, trophies:19, caps:103, intl_goals:14 },
+    honours:['World Cup 1974','European Cup ×3','Ballon d\'Or ×2'],
+    legacy:'The only man to win the World Cup as both captain and manager. Redefined what a defender could be.'
+  },
+  {
+    name:'Zinedine Zidane', number:'10', nationality:'France', position:'Midfielder', years:'1989–2006',
+    clubs:'Cannes, Bordeaux, Juventus, Real Madrid',
+    bio:'The most graceful midfielder of his generation, Zidane combined physical power with touch and vision so refined it resembled improvised art.',
+    stats:{ appearances:606, goals:125, assists:211, trophies:17, caps:108, intl_goals:31 },
+    honours:['World Cup 1998','Euro 2000','Champions League 2002','Ballon d\'Or 1998'],
+    legacy:'Two headed goals in a World Cup final. Three Champions Leagues as a manager. Zidane defined two different golden eras.'
+  },
+  {
+    name:'Ronaldo Nazário', number:'9', nationality:'Brazil', position:'Forward', years:'1993–2011',
+    clubs:'Cruzeiro, PSV, Barcelona, Inter Milan, Real Madrid',
+    bio:'R9 was the most devastatingly effective centre-forward the game has seen — blessed with pace, skill, and a finishing instinct that bordered on supernatural.',
+    stats:{ appearances:518, goals:352, assists:143, trophies:16, caps:98, intl_goals:62 },
+    honours:['World Cup 1994','World Cup 2002','Ballon d\'Or ×2','UEFA Cup 1998'],
+    legacy:'Twice FIFA World Player of the Year. Scored twice in a World Cup final. The complete centre-forward.'
+  },
+  {
+    name:'Ronaldinho', number:'10', nationality:'Brazil', position:'Midfielder', years:'1998–2015',
+    clubs:'Grêmio, PSG, Barcelona, AC Milan, Flamengo',
+    bio:'Football\'s great entertainer: a player whose joy was infectious, whose skill was outrageous, and whose two seasons at Barcelona were among the most breathtaking in the club\'s history.',
+    stats:{ appearances:524, goals:214, assists:279, trophies:15, caps:97, intl_goals:33 },
+    honours:['World Cup 2002','Champions League 2006','Ballon d\'Or 2005','La Liga ×2'],
+    legacy:'The player who made Bernabéu fans, applauding a Barcelona goal, forget which side they supported.'
+  },
+  {
+    name:'Paolo Maldini', number:'3', nationality:'Italy', position:'Defender', years:'1985–2009',
+    clubs:'AC Milan',
+    bio:'One club, 25 years, 1000 appearances. Maldini brought serenity and authority to the left-back and centre-back roles across three defining decades of European football.',
+    stats:{ appearances:1002, goals:33, assists:78, trophies:29, caps:126, intl_goals:7 },
+    honours:['Champions League ×5','Serie A ×7','World Cup Runner-Up 1994'],
+    legacy:'The gold standard of defending — elegant, composed, and utterly uncompromising when it mattered.'
+  },
+  {
+    name:'Lev Yashin', number:'1', nationality:'Soviet Union', position:'Goalkeeper', years:'1950–1970',
+    clubs:'Dynamo Moscow',
+    bio:'The Black Spider, the only goalkeeper ever to win the Ballon d\'Or, revolutionised the role by claiming crosses and organising defences in ways that had never been seen.',
+    stats:{ appearances:326, goals:0, assists:0, trophies:9, caps:74, intl_goals:0 },
+    honours:['Olympic Gold 1956','Euro Championship 1960','Ballon d\'Or 1963','Soviet League ×5'],
+    legacy:'The definitive goalkeeper of the twentieth century. No one else has come close to his Ballon d\'Or.'
+  },
+  {
+    name:'Michel Platini', number:'10', nationality:'France', position:'Midfielder', years:'1972–1987',
+    clubs:'Nancy, Saint-Étienne, Juventus',
+    bio:'Three consecutive Ballon d\'Or awards in the mid-1980s confirm Platini as the dominant player of his era — a free-kick specialist and creative genius of the highest order.',
+    stats:{ appearances:432, goals:224, assists:181, trophies:12, caps:72, intl_goals:41 },
+    honours:['Ballon d\'Or ×3','European Championship 1984','Serie A ×2','European Cup 1985'],
+    legacy:'The greatest midfielder Europe produced before Zidane — elegant, prolific, and utterly commanding.'
+  },
+  {
+    name:'George Best', number:'7', nationality:'Northern Ireland', position:'Forward', years:'1963–1983',
+    clubs:'Manchester United, Fulham, various',
+    bio:'The fifth Beatle, the Belfast Boy — Best was football\'s first rock star, a player of dazzling genius whose talent burned so bright it could not be contained.',
+    stats:{ appearances:470, goals:179, assists:136, trophies:5, caps:37, intl_goals:9 },
+    honours:['Ballon d\'Or 1968','European Cup 1968','English League ×2'],
+    legacy:'Pelé called him the greatest player in the world. Those who saw him play have spent a lifetime trying to explain what that actually looked like.'
+  },
+  {
+    name:'Eusébio', number:'10', nationality:'Portugal', position:'Forward', years:'1960–1979',
+    clubs:'Benfica, various',
+    bio:'The Black Panther from Mozambique was Portugal\'s greatest player — a thunderous striker who led Benfica to the European Cup and finished as top scorer at the 1966 World Cup.',
+    stats:{ appearances:440, goals:317, assists:112, trophies:16, caps:64, intl_goals:41 },
+    honours:['European Cup 1962','Ballon d\'Or 1965','Golden Boot 1966 WC','Primeira Liga ×11'],
+    legacy:'The first great African-born superstar of European football, and Benfica\'s eternal symbol.'
+  }
+];
+
+let currentPosFilter = 'all';
+
+function renderPlayers(list) {
+  if (!list.length) {
+    document.getElementById('player-grid').innerHTML =
+      '<div class="empty-state" style="grid-column:1/-1">No legends found. Try a different search.</div>';
+    return;
+  }
+  document.getElementById('player-grid').innerHTML = list.map(p => `
+    <div class="player-card">
+      <div class="player-number">${p.number}</div>
+      <div class="player-header">
+        <div class="player-meta">${p.nationality} · ${p.position} · ${p.years}</div>
+        <div class="player-name">${p.name}</div>
+        <div class="player-meta" style="margin-top:3px;font-style:italic">${p.clubs}</div>
+        <p class="player-bio">${p.bio}</p>
+        <div style="margin-top:8px">
+          ${p.honours.map(h => `<span class="sticker sticker-gold">${h}</span>`).join('')}
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-cell"><div class="stat-num">${p.stats.appearances}</div><div class="stat-label">Apps</div></div>
+        <div class="stat-cell"><div class="stat-num">${p.stats.goals}</div><div class="stat-label">Goals</div></div>
+        <div class="stat-cell"><div class="stat-num">${p.stats.assists}</div><div class="stat-label">Assists</div></div>
+        <div class="stat-cell"><div class="stat-num">${p.stats.trophies}</div><div class="stat-label">Trophies</div></div>
+        <div class="stat-cell"><div class="stat-num">${p.stats.caps}</div><div class="stat-label">Int'l Caps</div></div>
+        <div class="stat-cell"><div class="stat-num">${p.stats.intl_goals}</div><div class="stat-label">Int'l Goals</div></div>
+      </div>
+      <div class="player-legacy">
+        <div class="story-era" style="margin-top:0;margin-bottom:5px">Legacy</div>
+        <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:#2a1f10;line-height:1.5">"${p.legacy}"</p>
+      </div>
+    </div>`).join('');
+}
+
+function filterPlayers() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  let list = PLAYERS;
+  if (currentPosFilter !== 'all') list = list.filter(p => p.position === currentPosFilter);
+  if (q) list = list.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.nationality.toLowerCase().includes(q) ||
+    p.clubs.toLowerCase().includes(q)
+  );
+  renderPlayers(list);
+}
+
+function filterByPos(pos, btn) {
+  document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  currentPosFilter = pos;
+  filterPlayers();
+}
+
+// ── Init ──────────────────────────────────────────
+renderFeature(0);
+renderSidebar();
+renderGallery('all');
+renderPlayers(PLAYERS);
+</script>
+</body>
+</html>
